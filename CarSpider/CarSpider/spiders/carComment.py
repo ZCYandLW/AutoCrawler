@@ -70,9 +70,7 @@ class CarcommentSpider(scrapy.Spider):
         buy_address = response.meta.get('buy_address', '')  # 购买地址
         run_km = response.meta.get('run_km', '')  # 行驶距离
         comment = response.xpath("//*[@class='matter']")
-        comment = comment.xpath('string(.)').extract()[0].strip()  # 取得matter标签下的所有口碑comment
-        comment = re.sub('\s', comment)  # 删去空格
-
+        comment = comment.xpath('string(.)').extract()[0].replace("\n",'').replace(" ",'')  # 取得matter标签下的所有口碑comment并删去换行符和空格
         comment_item['desc'] = desc
         comment_item['user_name'] = user_name
         comment_item['publish_time'] = publish_time
@@ -81,5 +79,5 @@ class CarcommentSpider(scrapy.Spider):
         comment_item['buy_prices'] = buy_prices
         comment_item['buy_address'] = buy_address
         comment_item['run_km'] = run_km
-        comment_item['comment'] = ''
+        comment_item['comment'] = comment
         yield comment_item
